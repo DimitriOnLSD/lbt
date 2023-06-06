@@ -50,7 +50,7 @@ void register_reader()
         uint32_t comparator;
         printf("\nCodigo de leitor: ");
         comparator = type_int();
-        if (!comparator) // Caso o utilizador escreva 0, volta ao menu
+        if (!comparator)
             return;
         for (uint8_t k = 0; k < MAX_READERS; k++)
             if (reader[k].reader_code == comparator)
@@ -101,7 +101,7 @@ void request_book()
         uint8_t n = 0, max = 0;
         printf("\nCodigo de leitor: ");
         comparator = type_int();
-        if (!comparator) // Caso o utilizador escreva 0, volta ao menu
+        if (!comparator)
             return;
         for (uint8_t i = 0; i < MAX_READERS; i++)
             if (reader[i].reader_code == comparator)
@@ -163,7 +163,7 @@ void return_book()
         {
             printf("\nCodigo de leitor: ");
             comparator = type_int();
-            if (!comparator) // Caso o utilizador escreva 0, volta ao menu
+            if (!comparator)
                 return;
             for (uint8_t i = 0; i < MAX_READERS; i++)
                 if (reader[i].reader_code == comparator)
@@ -393,7 +393,6 @@ void user_history()
             printf("Este leitor nao existe.\n");
     } while (!reader_found);
     pause_exec();
-    // show last 10 requests by that user
 }
 
 /// @brief Pausa o programa ao esperar dados no buffer para que o utilizador possa ler o display
