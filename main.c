@@ -18,7 +18,8 @@
 uint8_t main(void)
 {
     SetConsoleTitle("Programa de requisicao de livros v1.0.2"); /* Atribuir titulo à consola */
-    book = malloc(sizeof(book_t) * MAX_BOOKS);                  /* Memory allocation is an equivalent for vectors. Struct byte size * MAX_BOOKS is num vector BOOK_FILE_data*/
+    book = malloc(sizeof(book_t) * MAX_BOOKS);                  /* Alocar dinâmicamente na memória o número de estruturas. */
+
     reader = malloc(sizeof(reader_t) * MAX_READERS);
     null_all_data();
 
@@ -59,7 +60,7 @@ uint8_t main(void)
     {
         uint8_t book_total = 0;
         uint8_t reader_total = 0;
-        book_t *book_file_data;
+        book_t *book_file_data; /* Criar temporariamente uma variável de estrutura */
         reader_t *reader_file_data;
 
         book_file_data = book_read_data(BOOK_FILE, &book_total);
@@ -70,16 +71,16 @@ uint8_t main(void)
 
         for (uint8_t i = 0; i < book_total; i++)
         {
-            strcpy(book[i].title, book_file_data[i].title);
-            strcpy(book[i].author, book_file_data[i].author);
-            strcpy(book[i].editor, book_file_data[i].editor);
-            book[i].isbn = book_file_data[i].isbn;
-            book[i].avail = book_file_data[i].avail;
-            book[i].was_requested = book_file_data[i].was_requested;
-            book[i].who_requested = book_file_data[i].who_requested;
-            book[i].rd.day = book_file_data[i].rd.day;
-            book[i].rd.month = book_file_data[i].rd.month;
-            book[i].rd.year = book_file_data[i].rd.year;
+            strcpy(book[i].title,          book_file_data[i].title);
+            strcpy(book[i].author,         book_file_data[i].author);
+            strcpy(book[i].editor,         book_file_data[i].editor);
+                   book[i].isbn =          book_file_data[i].isbn;
+                   book[i].avail =         book_file_data[i].avail;
+                   book[i].was_requested = book_file_data[i].was_requested;
+                   book[i].who_requested = book_file_data[i].who_requested;
+                   book[i].rd.day =        book_file_data[i].rd.day;
+                   book[i].rd.month =      book_file_data[i].rd.month;
+                   book[i].rd.year =       book_file_data[i].rd.year;
         }
         free(book_file_data);
 
@@ -91,25 +92,22 @@ uint8_t main(void)
 
         for (uint8_t i = 0; i < reader_total; i++)
         {
-            strcpy(reader[i].name, reader_file_data[i].name);
-            strcpy(reader[i].address, reader_file_data[i].address);
-            strcpy(reader[i].email, reader_file_data[i].email);
-            memcpy(reader[i].num_requests,
-                   reader_file_data[i].num_requests,
-                   sizeof(reader_file_data[i].num_requests));
-            memcpy(reader[i].history,
-                   reader_file_data[i].history,
-                   sizeof(reader_file_data[i].history));
-            reader[i].reader_code = reader_file_data[i].reader_code;
-            reader[i].phone_number = reader_file_data[i].phone_number;
-            reader[i].bd.day = reader_file_data[i].bd.day;
-            reader[i].bd.month = reader_file_data[i].bd.month;
-            reader[i].bd.year = reader_file_data[i].bd.year;
+            strcpy(reader[i].name,          reader_file_data[i].name);
+            strcpy(reader[i].address,       reader_file_data[i].address);
+            strcpy(reader[i].email,         reader_file_data[i].email);
+            memcpy(reader[i].num_requests,  reader_file_data[i].num_requests, sizeof(reader_file_data[i].num_requests));
+            memcpy(reader[i].history,       reader_file_data[i].history, sizeof(reader_file_data[i].history));
+                   reader[i].reader_code =  reader_file_data[i].reader_code;
+                   reader[i].phone_number = reader_file_data[i].phone_number;
+                   reader[i].bd.day =       reader_file_data[i].bd.day;
+                   reader[i].bd.month =     reader_file_data[i].bd.month;
+                   reader[i].bd.year =      reader_file_data[i].bd.year;
         }
         free(reader_file_data);
         pause_exec();
     }
 
+    /* Calcular quantidade de livros, leitores e requisições ativas */
     for (uint8_t i = 0; i < MAX_BOOKS; i++)
         if (book[i].isbn != 0)
             num_books++;
