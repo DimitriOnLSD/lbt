@@ -88,7 +88,6 @@ void request_book()
     uint32_t comparator;
     bool cant_request = true;
     bool reader_found = false;
-    bool history_filled = false;
     system("cls");
     printf("---| Requisitar Livro |---\n");
     for (uint8_t i = 0; i < MAX_BOOKS; i++)
@@ -435,7 +434,7 @@ void null_all_data()
     }
 }
 
-/// @brief Usa a data atual do computaador e recebe o index da estrutura livros, para calcular o numero de dias entre duas datas
+/// @brief Usa a data atual do computador e recebe o index da estrutura livros, para calcular o numero de dias entre duas datas
 /// @param i
 /// @return Devolve o número de dias após devolver um livro
 uint16_t count_days(uint8_t i)
@@ -494,11 +493,8 @@ void constrain_date(uint8_t *day, uint8_t *month, uint16_t year)
 {
     *month = constrain(*month, 1, 12);
 
-    if (year % 4 == 0)
-    {
-        if (*day > months_leap_year[*month - 1])
-            *day = months_leap_year[*month - 1];
-    }
+    if (year % 4 == 0 && *day > months_leap_year[*month - 1])
+        *day = months_leap_year[*month - 1];
     else if (*day > months_common_year[*month - 1])
         *day = months_common_year[*month - 1];
 }
@@ -561,66 +557,73 @@ int8_t read_keyboard_char()
     return data;
 }
 
+/// @brief Escreve dados das estruturas para o ficheiro dos livros
+/// @param filename É o ficheiro a guardar
+/// @param data É o tamanho total da estrutura como vetor
+/// @param total É a quantidade de estruturas [índice]
+/// @return Devolve o sucesso ou insucesso das funções realizadas
 bool book_write_data(int8_t *filename, book_t *data, uint8_t total)
 {
     FILE *fptr;
-    fptr = fopen(filename, "wb");
+    fptr = fopen(filename, "wb"); // Guardar em binário
 
-    /* ############# ERROR CHECKING ################ */
-    if (fptr == NULL)
+    if (fptr == NULL) // A função fopen devolve um ponteiro que é guardado em fptr. Caso fptr == NULL, existe um problema, logo devolve insucesso
         return false;
 
-    if (fwrite(&total, sizeof(int), 1, fptr) != 1)
+    if (fwrite(&total, sizeof(int), 1, fptr) != 1) // Escrever a quantidade de estruturas primeiro
         return false;
 
-    if (fwrite(data, sizeof(book_t), total, fptr) != total)
+    if (fwrite(data, sizeof(book_t), total, fptr) != total) // Escrever no ficheiro dados completos. Caso o número de escritas não corresponder á quantidade de estruturas, devolve um erro
         return false;
 
-    if (fclose(fptr) == EOF)
+    if (fclose(fptr) == EOF) // Fechar o ficheiro. Caso não consiga fechar, este devolve EOF (End of File). Devolve insucesso nesse caso
         return false;
-    /* ############################################# */
 
     return true;
 }
 
+/// @brief Lê dados das estruturas do ficheiro dos livros
+/// @param filename É o ficheiro a ler
+/// @param total Devolve como ponteiro o número de estruturas lidas
+/// @return Devolve NULL em erros ou devolve os dados lidos do ficheiro
 book_t *book_read_data(int8_t *filename, uint8_t *total)
 {
     FILE *fptr;
-    fptr = fopen(filename, "rb");
+    fptr = fopen(filename, "rb"); // Ler em binário
 
-    /* ############# ERROR CHECKING ################ */
     if (fptr == NULL)
         return NULL;
 
-    if (fread(total, sizeof(int), 1, fptr) != 1)
+    if (fread(total, sizeof(int), 1, fptr) != 1) // Ler a quantidade de estruturas primeiro para usar a função malloc
         return NULL;
-    /* ############################################# */
 
-    book_t *data = malloc(sizeof(book_t) * *total);
+    book_t *data = malloc(sizeof(book_t) * *total); // Alocar dinâmicamente na memória o número de estruturas
 
-    /* ############# ERROR CHECKING ################*/
-    if (fread(data, sizeof(book_t), *total, fptr) != *total)
+    if (fread(data, sizeof(book_t), *total, fptr) != *total) // Guardar em data a quantidade de estruturas e os seus dados.
     {
-        free(data); /* Prevent memory leak */
+        free(data); // Prevenir memory leak
         return NULL;
     }
 
     if (fclose(fptr) == EOF)
     {
-        free(data); /* Prevent memory leak */
+        free(data);
         return NULL;
     }
-    /* ############################################# */
 
     return data;
 }
 
+/// @brief Escreve dados das estruturas para o ficheiro dos leitores
+/// @param filename É o ficheiro a guardar
+/// @param data É o tamanho total da estrutura como vetor
+/// @param total É a quantidade de estruturas [índice]
+/// @return Devolve o sucesso ou insucesso das funções realizadas
 bool reader_write_data(int8_t *filename, reader_t *data, uint8_t total)
 {
     FILE *fptr;
     fptr = fopen(filename, "wb");
 
-    /* ############# ERROR CHECKING ################*/
     if (fptr == NULL)
         return false;
 
@@ -636,12 +639,14 @@ bool reader_write_data(int8_t *filename, reader_t *data, uint8_t total)
     return true;
 }
 
+/// @brief Lê dados das estruturas do ficheiro dos leitores
+/// @param filename É o ficheiro a ler
+/// @param total Devolve como ponteiro o número de estruturas lidas
+/// @return Devolve NULL em erros ou devolve os dados lidos do ficheiro
 reader_t *reader_read_data(int8_t *filename, uint8_t *total)
 {
     FILE *fptr;
     fptr = fopen(filename, "rb");
-
-    /* ############# ERROR CHECKING ################*/
 
     if (fptr == NULL)
         return NULL;
@@ -651,17 +656,15 @@ reader_t *reader_read_data(int8_t *filename, uint8_t *total)
 
     reader_t *data = malloc(sizeof(reader_t) * *total);
 
-    /* ############# ERROR CHECKING ################*/
-
     if (fread(data, sizeof(reader_t), *total, fptr) != *total)
     {
-        free(data); /* Prevent memory leak */
+        free(data);
         return NULL;
     }
 
     if (fclose(fptr) == EOF)
     {
-        free(data); /* Prevent memory leak */
+        free(data);
         return NULL;
     }
 
