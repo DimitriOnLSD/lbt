@@ -17,7 +17,7 @@
 
 uint8_t main(void)
 {
-    SetConsoleTitle("Programa de requisicao de livros v1.0.2"); /* Atribuir titulo à consola */
+    SetConsoleTitle("Programa de requisicao de livros v1.0.0"); /* Atribuir titulo à consola */
     book = malloc(sizeof(book_t) * MAX_BOOKS);                  /* Alocar dinâmicamente na memória o número de estruturas. */
 
     reader = malloc(sizeof(reader_t) * MAX_READERS);
