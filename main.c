@@ -25,18 +25,18 @@ uint8_t main(void)
     do
     {
         system("cls");
-        printf("Opcoes de arranque:");
+        printf("Op%c%ces de arranque:", 135, 228);
         printf("\n"
                "\n[1] Importar dados dos ficheiros"
-               "\n[2] Gerar dados a partir da funcao"
+               "\n[2] Gerar dados a partir da fun%c%co " BBLU "generate_data()" COLOR_RESET
                "\n[3] Dados nulos"
                "\n[0] Sair"
-               "\n");
+               "\n", 135, 198);
 
         switch (read_keyboard_dec())
         {
         default:
-            printf(BRED "\n\nA opcao escolhida nao existe no menu.\n" COLOR_RESET);
+            printf(BRED "\n\nA op%c%co escolhida n%co existe no menu.\n" COLOR_RESET, 135, 198, 135);
             break;
         case '0':
             return 0;
@@ -119,11 +119,11 @@ uint8_t main(void)
 
     do
     {
-        system("cls"); /* Limpar consola */
-        printf("---| Gestao de Requisi\x87oes de uma Biblioteca |---\n");
+        system("cls");
+        printf("---| Gest%co de Requisi%c%ces de uma Biblioteca |---\n", 198, 135, 228);
         printf("\nTotal de livros:             %d/%d", num_books, MAX_BOOKS);
         printf("\nTotal de leitores:           %d", num_readers);
-        printf("\nTotal de requisicoes ativas: %d", num_active_requests);
+        printf("\nTotal de requisi%c%ces ativas: %d", 135, 228, num_active_requests);
         printf("\n"
                "\n[1] Registar Livro"
                "\n[2] Registar Leitor"
@@ -135,7 +135,7 @@ uint8_t main(void)
 
         switch (read_keyboard_dec())
         {
-        case '0': /* Sair*/
+        case '0':
             system("cls");
             printf("---| Sair |---"
                    "\n"
@@ -145,32 +145,32 @@ uint8_t main(void)
                    "\n");
             submenu_exit(read_keyboard_dec());
             break;
-        case '1': /* Registar livro */
+        case '1':
             register_book();
             break;
-        case '2': /* Registar leitor */
+        case '2':
             register_reader();
             break;
-        case '3': /* Requisitar livro */
+        case '3':
             request_book();
             break;
-        case '4': /* Devolver livro */
+        case '4':
             return_book();
             break;
-        case '5': /* Lista (sub-menu) */
+        case '5':
             system("cls");
             printf("---| Listagens |---"
                    "\n"
                    "\n[1] Lista de livros"
                    "\n[2] Lista de leitores"
                    "\n[3] Total de livros requisitados"
-                   "\n[4] Historico de livros requisitados de um leitor"
+                   "\n[4] Hist%crico de livros requisitados por um leitor"
                    "\n[0] Voltar"
-                   "\n");
+                   "\n", 162);
             submenu_listing(read_keyboard_dec());
             break;
         default:
-            printf(BRED "\n\nA opcao escolhida nao existe no menu.\n" COLOR_RESET);
+            printf(BRED "\n\nA op%c%co escolhida n%co existe no menu.\n" COLOR_RESET, 135, 198, 198);
         }
     } while (!end_program);
 
@@ -193,16 +193,3 @@ uint8_t main(void)
 
     return 0;
 }
-
-/*
-to do list:
-no readers at return_book();
-checker for isbn and reader code at setup. If found equal instance, remove struct[i].sub[k] with null_index_data(int i, int k);
-checker for birth date at setup. if overflow (day: 32 or month: 13), override to 01/01
-
-check digit at date scanf
-
-
-# improve at code:
-save to only one file
-*/

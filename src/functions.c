@@ -229,7 +229,7 @@ void submenu_listing(char op)
         user_history();
         break;
     default:
-        printf(BRED "\n\nA opcao escolhida nao existe no menu.\n" COLOR_RESET);
+        printf(BRED "\n\nA op%c%co escolhida n%co existe no menu.\n" COLOR_RESET, 135, 198, 198);
     }
 }
 
@@ -250,7 +250,7 @@ void submenu_exit(char op)
         save_files = false;
         break;
     default:
-        printf(BRED "\n\nA opcao escolhida nao existe no menu.\n" COLOR_RESET);
+        printf(BRED "\n\nA op%c%co escolhida n%co existe no menu.\n" COLOR_RESET, 135, 198, 198);
     }
 }
 
